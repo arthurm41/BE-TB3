@@ -28,10 +28,34 @@ Route::get('/pokedex', function (Request $request) {
 });
 
 
-// PRÓXIMO POKÉMON ALEATÓRIO
-Route::get('/proximo-pokemon', function () {
-    $randomId = rand(1, 1025);
-    $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$randomId}");
+// PRÓXIMO POKÉMON (SEQUENCIAL)
+Route::get('/pokemon/{id}/proximo', function ($id) {
+    $nextId = $id + 1;
+    // Limitar ao máximo de 1025 Pokémons
+    if ($nextId > 1025) {
+        $nextId = 1;
+    }
+    
+    $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$nextId}");
+    
+    $pokemon = null;
+    
+    if ($response->successful()) {
+        $pokemon = $response->json();
+    }
+    
+    return view('pokemon', compact('pokemon'));
+});
+
+// POKÉMON ANTERIOR (SEQUENCIAL)
+Route::get('/pokemon/{id}/anterior', function ($id) {
+    $prevId = $id - 1;
+    // Limitar ao mínimo de 1
+    if ($prevId < 1) {
+        $prevId = 1025;
+    }
+    
+    $response = Http::get("https://pokeapi.co/api/v2/pokemon/{$prevId}");
     
     $pokemon = null;
     

@@ -209,10 +209,19 @@
             MEUS POKÉMONS
         </a>
 
-        <a href="/proximo-pokemon"
-            class="pixel-btn bg-black text-[10px] px-3 py-2 w-full text-center">
-            PRÓXIMO
-        </a>
+        @if($pokemon)
+            <div class="flex gap-2 mt-2">
+                <a href="/pokemon/{{ $pokemon['id'] }}/anterior"
+                   class="pixel-btn bg-black text-[10px] px-3 py-2 flex-1 text-center">
+                    &lt; ANTERIOR
+                </a>
+
+                <a href="/pokemon/{{ $pokemon['id'] }}/proximo"
+                   class="pixel-btn bg-black text-[10px] px-3 py-2 flex-1 text-center">
+                    PRÓXIMO &gt;
+                </a>
+            </div>
+        @endif
 
     </div>
 
