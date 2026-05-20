@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Autorizacao;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificacaoResponsavel;
 class AutorizacaoController extends Controller
 {
     // LISTAR ADMIN
@@ -44,7 +46,7 @@ class AutorizacaoController extends Controller
 
         Autorizacao::create([
 
-            'professor' => $request->professor,
+            'professor' => auth()->user()->name,
             'aluno' => $request->aluno,
             'turma' => $request->turma,
             'tipo' => $request->tipo,
@@ -77,6 +79,23 @@ class AutorizacaoController extends Controller
 
         $autorizacao->save();
 
+        // SIMULAÇÃO WHATSAPP
+        Log::info(
+            'WHATSAPP SIMULADO: O aluno '
+            . $autorizacao->aluno .
+            ' foi liberado pelo professor.'
+        );
+
+        // EMAIL
+        Mail::to('responsavel@teste.com')
+            ->send(
+                new NotificacaoResponsavel(
+                    'O aluno '
+                    . $autorizacao->aluno .
+                    ' foi liberado pelo professor.'
+                )
+            );
+
         return redirect()
             ->back()
             ->with('success', 'Aluno liberado com sucesso!');
@@ -100,6 +119,23 @@ class AutorizacaoController extends Controller
         $autorizacao->status = 'Validado na Portaria';
 
         $autorizacao->save();
+
+        // SIMULAÇÃO WHATSAPP
+        Log::info(
+            'WHATSAPP SIMULADO: O aluno '
+            . $autorizacao->aluno .
+            ' saiu da escola.'
+        );
+
+        // EMAIL
+        Mail::to('responsavel@teste.com')
+            ->send(
+                new NotificacaoResponsavel(
+                    'O aluno '
+                    . $autorizacao->aluno .
+                    ' saiu da escola.'
+                )
+            );
 
         return redirect()
             ->back()

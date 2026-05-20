@@ -1,124 +1,149 @@
-<nav x-data="{ open: false }" class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+<nav x-data="{ open: true }">
 
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- SIDEBAR -->
+    <aside
+        :class="open ? 'w-72' : 'w-24'"
+        class="fixed top-0 left-0 z-50 h-screen bg-slate-950 border-r border-white/10 shadow-2xl transition-all duration-300">
 
-        <div class="flex justify-between h-16">
+        <!-- TOPO -->
+        <div class="h-24 flex items-center justify-between px-6 border-b border-white/10">
 
-            <!-- LEFT -->
-            <div class="flex">
+            <!-- LOGO -->
+            <a href="{{ route('autorizacoes.index') }}"
+               class="text-3xl font-extrabold tracking-wide text-white whitespace-nowrap">
 
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <h1 class="text-xl font-bold text-gray-800 dark:text-white">
-                            SAFE
-                        </h1>
-                    </a>
-                </div>
+                <span x-show="open">SAFE</span>
 
-                <!-- Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <span x-show="!open">S</span>
 
-                    <x-nav-link :href="route('autorizacoes.index')" :active="request()->routeIs('autorizacoes.*')">
-                        Autorizações
-                    </x-nav-link>
+            </a>
 
-                </div>
-            </div>
+            <!-- BOTÃO MENU -->
+            <button
+                @click="open = !open"
+                class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-xl transition">
 
-            <!-- RIGHT -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-5 h-5"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
 
-                <div class="text-gray-700 dark:text-gray-300 me-4">
-                    {{ Auth::user()->name }}
-                </div>
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 6h16M4 12h16M4 18h16"/>
 
-                <!-- Logout -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                </svg>
 
-                    <button type="submit"
-                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
-                        Sair
-                    </button>
-                </form>
-
-            </div>
-
-            <!-- MOBILE BUTTON -->
-            <div class="-me-2 flex items-center sm:hidden">
-
-                <button @click="open = ! open"
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
-
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-
-                        <path
-                            :class="{'hidden': open, 'inline-flex': ! open }"
-                            class="inline-flex"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16" />
-
-                        <path
-                            :class="{'hidden': ! open, 'inline-flex': open }"
-                            class="hidden"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-
-                    </svg>
-
-                </button>
-
-            </div>
+            </button>
 
         </div>
-    </div>
 
-    <!-- MOBILE MENU -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+        <!-- MENU -->
+        <div class="p-4 space-y-3">
 
-        <div class="pt-2 pb-3 space-y-1">
+            <!-- AUTORIZAÇÕES -->
+            <a href="{{ route('autorizacoes.index') }}"
+               class="flex items-center gap-3 px-4 py-4 rounded-2xl transition
+               {{ request()->routeIs('autorizacoes.*')
+                    ? 'bg-blue-600 text-white shadow-lg'
+                    : 'text-slate-300 hover:bg-white/10 hover:text-white' }}">
 
-            <x-responsive-nav-link :href="route('autorizacoes.index')">
-                Autorizações
-            </x-responsive-nav-link>
+                <!-- ICON -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-6 h-6 min-w-[24px]"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
+
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+
+                </svg>
+
+                <!-- TEXTO -->
+                <span x-show="open"
+                      class="font-semibold text-lg">
+                    Autorizações
+                </span>
+
+            </a>
+
+            <!-- NOVA AUTORIZAÇÃO -->
+            @if(Auth::user()->role == 'admin')
+
+            <a href="{{ route('autorizacoes.create') }}"
+               class="flex items-center gap-3 px-4 py-4 rounded-2xl transition
+               text-slate-300 hover:bg-white/10 hover:text-white">
+
+                <!-- ICON -->
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="w-6 h-6 min-w-[24px]"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
+
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M12 4v16m8-8H4"/>
+
+                </svg>
+
+                <!-- TEXTO -->
+                <span x-show="open"
+                      class="font-semibold text-lg">
+                    Nova Autorização
+                </span>
+
+            </a>
+
+            @endif
 
         </div>
 
         <!-- USER -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="absolute bottom-0 left-0 w-full p-4 border-t border-white/10 bg-slate-950">
 
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800 dark:text-gray-200">
+            <!-- USER INFO -->
+            <div x-show="open" class="mb-4">
+
+                <h2 class="text-white font-bold text-lg">
                     {{ Auth::user()->name }}
-                </div>
+                </h2>
 
-                <div class="font-medium text-sm text-gray-500">
+                <p class="text-slate-400 text-sm mt-1 truncate">
                     {{ Auth::user()->email }}
-                </div>
+                </p>
+
             </div>
 
             <!-- LOGOUT -->
-            <div class="mt-3 space-y-1">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
 
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                <button type="submit"
+                    class="w-full bg-red-500 hover:bg-red-600 transition text-white py-3 rounded-2xl font-bold shadow-lg">
 
-                    <button type="submit"
-                        class="w-full text-left px-4 py-2 text-red-500">
+                    <span x-show="open">
                         Sair
-                    </button>
-                </form>
+                    </span>
 
-            </div>
+                    <span x-show="!open">
+                        ↩
+                    </span>
+
+                </button>
+
+            </form>
 
         </div>
 
-    </div>
+    </aside>
+
+    </main>
 
 </nav>
