@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('Confecção TB2')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Red,
             ])
             ->discoverResources(
                 in: app_path('Filament/Resources'),
